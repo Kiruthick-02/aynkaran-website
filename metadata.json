@@ -1,0 +1,6 @@
+{
+  "name": "Insurance Lead Portal",
+  "description": "Premium marketing, lead generation, and advisor recruitment portal for insurance business managers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
