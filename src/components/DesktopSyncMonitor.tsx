@@ -1,3 +1,4 @@
+//components/DesktopSyncMonitor.tsx
 import React, { useState } from 'react';
 import { AdvisorRegistration, InsuranceEnquiry, ContactMessage, NewsPost } from '../types';
 import { Database, Laptop, Plus, Trash2, Send, CheckCircle, RefreshCw } from 'lucide-react';

@@ -3,7 +3,7 @@ import React from 'react';
 export default function MarqueeTicker() {
   const alerts = [
     { text: '🔥 ADVISOR recruitment alert: Applications are now open! Click "Become an Advisor" to apply.', type: 'recruitment' },
-    { text: '📊 Industry Leading Claim Settlement Ratio: HDFC Life (99.5%) • Tata AIA (99.1%) • LIC (98.6%) for FY 25-26.', type: 'stats' },
+    { text: '📊 Industry Leading Claim Settlement Ratio: HDFC Life (99.5%) • Bajaj General (98.2%) • SBI Life (97.4%) • Care Health (95.2%) for FY 25-26.', type: 'stats' },
     { text: '⚠️ IRDAI Regulatory Alert: Free 30-day look-up period is now guaranteed on all digital life insurance policies.', type: 'regulation' },
     { text: '🩺 Zero medical tests required for Family Health Guard plans up to Age 50. Safeguard your family today!', type: 'product' },
     { text: '💬 Instant claim updates are now available on WhatsApp. Connect with our dedicated claim desk for 24/7 support.', type: 'support' }

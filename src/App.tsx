@@ -212,6 +212,7 @@ export default function App() {
 
   // Back-to-top feature
   const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     const centerEl = document.getElementById('center-scrollable');
     if (centerEl) centerEl.scrollTop = 0;
   };
@@ -280,10 +281,10 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-slate-50 font-sans select-none antialiased">
+    <div className="min-h-screen flex flex-col bg-slate-100/70 font-sans select-none antialiased">
       
       {/* 1. STICKY / FIXED HEADER AREA */}
-      <header className="bg-[#0F4C81] text-white z-30 shadow-md flex-shrink-0">
+      <header className="bg-[#0F4C81] text-white z-30 shadow-md flex-shrink-0 sticky top-0">
         
         {/* Brand Name Panel */}
         <div className="py-4 text-center border-b border-[#0F4C81]/15 bg-[#0D4170]/30">
@@ -439,12 +440,12 @@ export default function App() {
       </header>
 
       {/* 3. THREE-COLUMN CENTRAL STAGE WITH LAYOUT ALIGNMENTS */}
-      <main className="flex-1 overflow-hidden p-4 md:p-5 gap-5 max-w-[1920px] mx-auto w-full flex">
+      <main className="flex-1 p-4 md:p-6 gap-6 max-w-[1920px] mx-auto w-full flex items-start">
         
         {/* ==========================================
             A. LEFT SIDEBAR (POSTERS & ADS)
             ========================================== */}
-        <aside className="w-52 hidden xl:flex flex-col gap-4 flex-shrink-0">
+        <aside className="w-52 hidden xl:flex flex-col gap-4 flex-shrink-0 sticky top-28 self-start">
           
           {/* Poster 1 - Family Health Guard (Ad Top) */}
           <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col group hover:border-blue-300 transition-all text-left">
@@ -499,11 +500,11 @@ export default function App() {
         </aside>
 
         {/* ==========================================
-            B. CENTER MAIN STAGE (SCROLLABLE ACTIVE PAGE)
+            B. CENTER MAIN STAGE (NATURALLY EXPANDED CONTENT)
             ========================================== */}
         <section 
           id="center-scrollable"
-          className="flex-1 bg-white border border-slate-200 rounded-3xl shadow-xl overflow-y-auto custom-scrollbar flex flex-col relative"
+          className="flex-1 min-w-0 bg-white border border-slate-200/80 rounded-2xl shadow-sm flex flex-col relative overflow-hidden"
         >
           {/* Inner sticky banner head matching original wireframe */}
           <div className="p-5 border-b flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur-md z-20">
@@ -896,7 +897,7 @@ export default function App() {
         {/* ==========================================
             C. RIGHT SIDEBAR (METRICS & CHAT COMPANION)
             ========================================== */}
-        <aside className="w-52 hidden xl:flex flex-col gap-4 flex-shrink-0">
+        <aside className="w-52 hidden xl:flex flex-col gap-4 flex-shrink-0 sticky top-28 self-start">
           
           {/* Claim Settlement Performance Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative text-left">
@@ -912,15 +913,15 @@ export default function App() {
           </div>
 
           {/* Simulated Help Chat Bubble Area */}
-          <div className="flex-1 bg-[#0F4C81] border border-[#0D4170] rounded-2xl p-4 flex flex-col justify-between text-white shadow-xl relative text-left">
-            <div className="flex flex-col h-full justify-between space-y-4">
-              <div className="space-y-1.5 pb-2 border-b border-white/10">
+          <div className="bg-[#0F4C81] border border-[#0D4170] rounded-2xl p-4 flex flex-col justify-between text-white shadow-lg relative text-left">
+            <div className="flex flex-col space-y-3">
+              <div className="space-y-1 pb-2 border-b border-white/10">
                 <span className="text-[10px] font-mono font-extrabold text-sky-200 uppercase tracking-widest block">Aynkaran AI Companion</span>
                 <h4 className="font-extrabold text-xs uppercase tracking-wider">Interactive Assistant</h4>
               </div>
 
               {/* Chat Feed */}
-              <div className="flex-1 overflow-y-auto max-h-48 text-[10px] space-y-2.5 custom-scrollbar pr-1">
+              <div className="overflow-y-auto max-h-48 text-[10px] space-y-2.5 custom-scrollbar pr-1">
                 {chatMessages.map((msg, idx) => (
                   <div key={idx} className={`p-2 rounded-lg leading-normal ${msg.sender === 'user' ? 'bg-[#3FA9F5] text-white ml-6 text-right' : 'bg-[#0D4170] text-sky-50 mr-6'}`}>
                     {msg.text}
@@ -948,12 +949,93 @@ export default function App() {
       </main>
 
       {/* 4. GLOBAL BOTTOM FOOTER */}
-      <footer className="bg-white border-t border-slate-200 flex-shrink-0 z-20">
-        <div className="max-w-[1800px] mx-auto px-6 py-5 flex justify-between items-center text-xs font-mono font-bold text-slate-400 uppercase">
-          <p>© 2026 Aynkaran Consultants Group • All Rights Reserved</p>
-          <div className="flex gap-4">
-            <span className="hover:text-[#0F4C81] cursor-pointer">Support: info@aynkaran.in</span>
-            <span>IRDAI Registration No. 1290-A</span>
+      <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 flex-shrink-0 z-20 mt-10 text-left">
+        <div className="max-w-[1920px] mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+          
+          {/* Col 1: Brand & Bio */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-inner">
+                <Umbrella className="w-4 h-4 text-[#0F4C81] stroke-[2.5]" />
+              </div>
+              <span className="font-extrabold text-white text-sm tracking-wide uppercase">Aynkaran Consultants</span>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              India's premier independent insurance consultancy and recruiting partner. Providing tailored life, health, and retirement security since 2012.
+            </p>
+            <div className="text-[10px] font-mono text-slate-400 space-y-0.5">
+              <p>IRDAI Registration No. 1290-A</p>
+              <p>ISO 9001:2015 Certified Operations</p>
+            </div>
+          </div>
+
+          {/* Col 2: Navigation Links */}
+          <div className="space-y-2.5">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white border-l-2 border-[#3FA9F5] pl-2.5">
+              Quick Portals
+            </h4>
+            <ul className="space-y-1.5 text-xs text-slate-400 font-medium">
+              <li><button onClick={() => navigateToPage('home')} className="hover:text-white transition">Home Dashboard</button></li>
+              <li><button onClick={() => navigateToPage('about')} className="hover:text-white transition">About Our Firm</button></li>
+              <li><button onClick={() => navigateToPage('companies')} className="hover:text-white transition">Partner Insurers</button></li>
+              <li><button onClick={() => navigateToPage('products')} className="hover:text-white transition">Insurance Plans</button></li>
+              <li><button onClick={() => navigateToPage('services')} className="hover:text-white transition">Consulting Services</button></li>
+              <li><button onClick={() => navigateToPage('advisor')} className="hover:text-white transition">Become an Advisor</button></li>
+            </ul>
+          </div>
+
+          {/* Col 3: Policy Categories */}
+          <div className="space-y-2.5">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white border-l-2 border-emerald-500 pl-2.5">
+              Insurance Solutions
+            </h4>
+            <ul className="space-y-1.5 text-xs text-slate-400 font-medium">
+              <li><button onClick={() => navigateToPage('products')} className="hover:text-white transition">Term Life Protection</button></li>
+              <li><button onClick={() => navigateToPage('products')} className="hover:text-white transition">Comprehensive Health Guard</button></li>
+              <li><button onClick={() => navigateToPage('products')} className="hover:text-white transition">Child Higher Education Fund</button></li>
+              <li><button onClick={() => navigateToPage('products')} className="hover:text-white transition">Guaranteed Pension & Retirement</button></li>
+              <li><button onClick={() => navigateToPage('claims')} className="hover:text-white transition">24/7 Cashless Claim Desk</button></li>
+            </ul>
+          </div>
+
+          {/* Col 4: Contact & Support */}
+          <div className="space-y-2.5">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white border-l-2 border-[#F4B400] pl-2.5">
+              Connect With Us
+            </h4>
+            <div className="space-y-2 text-xs text-slate-400">
+              <p className="flex items-center gap-2">
+                <span className="text-[#F4B400] font-bold">📞 Phone:</span> +91 9876543210
+              </p>
+              <p className="flex items-center gap-2">
+                <span className="text-[#3FA9F5] font-bold">✉️ Email:</span> contact@aynkaran.in
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="text-emerald-400 font-bold">📍 Head Office:</span> Corporate Tower, Mount Road, Chennai, TN
+              </p>
+              <div className="pt-1">
+                <button 
+                  onClick={() => navigateToPage('enquiry')}
+                  className="bg-[#3FA9F5] hover:bg-[#3FA9F5]/90 text-white font-bold text-[11px] px-3.5 py-1.5 rounded-lg transition uppercase tracking-wider"
+                >
+                  Request Call Back
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Sub-footer Disclaimer Bar */}
+        <div className="border-t border-slate-800 bg-slate-950 py-3 px-6 text-[10px] font-mono text-slate-500">
+          <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
+            <p>© 2026 Aynkaran Consultants Private Limited • All Rights Reserved</p>
+            <div className="flex flex-wrap justify-center gap-5">
+              <span className="hover:text-slate-300 cursor-pointer">Privacy Protocols</span>
+              <span className="hover:text-slate-300 cursor-pointer">Terms of Use</span>
+              <span className="hover:text-slate-300 cursor-pointer">IRDAI Disclaimer</span>
+              <span>Portal ID: #SEC-990-MDB</span>
+            </div>
           </div>
         </div>
       </footer>
@@ -967,18 +1049,6 @@ export default function App() {
       >
         <ArrowUp className="w-4 h-4 text-slate-600" />
       </button>
-
-      {/* FLOATING DEVELOPER MONGODB REAL-TIME REPLICATOR MONITOR */}
-      <DesktopSyncMonitor 
-        enquiries={enquiries}
-        advisors={advisors}
-        contacts={contacts}
-        newsPosts={newsPosts}
-        onAddNewsPost={handleAddNewsPost}
-        onClearData={handleClearData}
-        onDeleteEnquiry={handleDeleteEnquiry}
-        onDeleteAdvisor={handleDeleteAdvisor}
-      />
 
     </div>
   );

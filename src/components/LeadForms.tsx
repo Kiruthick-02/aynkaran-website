@@ -1,3 +1,4 @@
+//components/LeadForms.tsx
 import React, { useState } from 'react';
 import { InsuranceEnquiry, AdvisorRegistration, ContactMessage } from '../types';
 import { Check, ClipboardList, Shield, UserCheck, AlertTriangle } from 'lucide-react';

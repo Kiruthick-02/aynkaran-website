@@ -10,13 +10,13 @@ import {
 
 export const companiesData: InsuranceCompany[] = [
   {
-    id: 'lic',
-    name: 'Life Insurance Corporation of India (LIC)',
-    shortDescription: 'The oldest and largest state-owned insurance group in India with robust security and absolute trust.',
-    description: 'Life Insurance Corporation of India is an Indian state-owned insurance group and investment corporation. It has been the cornerstone of trust and financial protection for millions of Indian households since 1956.',
-    logo: 'LIC',
-    categories: ['Life', 'Savings', 'Pension'],
-    claimRatio: '98.6%',
+    id: 'sbi-life',
+    name: 'SBI Life Insurance',
+    shortDescription: 'Leveraging the expansive trust of State Bank of India with budget-friendly protective solutions.',
+    description: 'SBI Life Insurance is a joint venture between State Bank of India and BNP Paribas Cardif. It offers simple, accessible protective covers across individual, group, life, and pension segments.',
+    logo: 'SBI',
+    categories: ['Life', 'Child', 'Savings', 'Pension'],
+    claimRatio: '97.4%',
     rating: 4.8
   },
   {
@@ -33,50 +33,20 @@ export const companiesData: InsuranceCompany[] = [
     id: 'care-health',
     name: 'Care Health Insurance',
     shortDescription: 'Specialist health insurer providing extensive, cashless hospitalization covers and critical illness plans.',
-    description: 'Care Health Insurance (formerly Religare Health Insurance) is a specialized health insurer offering products in the retail segment for Health Insurance, Critical Illness, Personal Accident, Top-up Coverage, International Travel Insurance and Maternity.',
+    description: 'Care Health Insurance is a specialized health insurer offering products in the retail segment for Health Insurance, Critical Illness, Personal Accident, Top-up Coverage, International Travel Insurance and Maternity.',
     logo: 'CARE',
     categories: ['Health', 'Accident', 'Group'],
     claimRatio: '95.2%',
     rating: 4.7
   },
   {
-    id: 'sbi-life',
-    name: 'SBI Life Insurance',
-    shortDescription: 'Leveraging the expansive trust of State Bank of India with budget-friendly protective solutions.',
-    description: 'SBI Life Insurance is a joint venture between State Bank of India and French financial institution BNP Paribas Cardif. It offers simple, accessible protective covers across rural and urban sectors alike.',
-    logo: 'SBI',
-    categories: ['Life', 'Child', 'Savings', 'Pension'],
-    claimRatio: '97.4%',
-    rating: 4.8
-  },
-  {
-    id: 'icici-pru',
-    name: 'ICICI Prudential Life',
-    shortDescription: 'Leading provider of tech-enabled ULIPs, savings plans, and term covers with seamless digital support.',
-    description: 'ICICI Prudential Life Insurance Company is a joint venture between ICICI Bank Limited and Prudential Corporation Holdings Limited. It focuses on customer-centric digital enrollment and fast claim settlements.',
-    logo: 'ICICI',
-    categories: ['Life', 'ULIP', 'Retirement', 'Savings'],
-    claimRatio: '98.9%',
-    rating: 4.8
-  },
-  {
-    id: 'tata-aia',
-    name: 'Tata AIA Life Insurance',
-    shortDescription: 'Combining Tata\'s trust with AIA\'s global expertise to offer outstanding wealth and protection plans.',
-    description: 'Tata AIA Life Insurance Company Limited is a joint venture company, formed by Tata Sons Pvt. Ltd. and AIA Group Limited. It is widely renowned for premium term plans and high claim settlement efficiency.',
-    logo: 'TATA',
-    categories: ['Life', 'Investment', 'Savings'],
-    claimRatio: '99.1%',
-    rating: 4.9
-  },
-  {
-    id: 'max-life',
-    name: 'Max Life Insurance',
-    shortDescription: 'Focusing on individual terminal protection, long term savings, and customized rider benefits.',
-    description: 'Max Life Insurance Company Limited is a joint venture between Max Financial Services and Axis Bank. It offers extensive multi-decade term covers and smart pension solutions.',
-    logo: 'MAX',
-    categories: ['Life', 'Pension', 'ULIP'],
-    claimRatio: '99.3%',
+    id: 'bajaj-general',
+    name: 'Bajaj General Insurance',
+    shortDescription: 'Leading general insurer offering motor, health, travel, and commercial risk protection across India.',
+    description: 'Bajaj Allianz General Insurance is a joint venture between Bajaj Finserv Limited and Allianz SE. It provides comprehensive general insurance solutions including health, motor, travel, home, and commercial insurance with fast digital claims.',
+    logo: 'BAJAJ',
+    categories: ['General', 'Motor', 'Health', 'Travel'],
+    claimRatio: '98.2%',
     rating: 4.8
   }
 ];

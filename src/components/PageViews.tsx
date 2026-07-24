@@ -28,7 +28,7 @@ export function AboutUsView({ companies }: { companies: InsuranceCompany[] }) {
 
   const milestones = [
     { year: '2012', title: 'Foundation', desc: 'Began as a small insurance advisory consultancy.' },
-    { year: '2016', title: 'Multi-Brand Link', desc: 'Partnered with LIC, HDFC Life, and Care Health to extend advisor capabilities.' },
+    { year: '2016', title: 'Multi-Brand Link', desc: 'Partnered with SBI Life, HDFC Life, Care Health, and Bajaj General Insurance to extend advisor capabilities.' },
     { year: '2020', title: 'Digital Upgrade', desc: 'Integrated state-of-the-art lead logging and customer renewal databases.' },
     { year: '2024', title: 'Peak Scale', desc: 'Assisted over 12,000 active policies and built a team of 150+ licensed advisors.' }
   ];
@@ -348,83 +348,210 @@ export function ProductsView({
 // ==========================================
 // 4. CLAIMS ASSISTANCE VIEW
 // ==========================================
+// 4. CLAIMS VIEW
+// ==========================================
 export function ClaimsView() {
-  const claimSteps = [
-    { num: '01', title: 'Intimation', desc: 'Notify our support line or register online on our claims portal immediately during hospital admission or event.' },
-    { num: '02', title: 'KYC & Bill Compilation', desc: 'Scan original hospital receipts, discharge certificates, and diagnosis paperwork.' },
-    { num: '03', title: 'File Review', desc: 'Our specialized field officer audits the documentation and coordinates directly with the underwriting team.' },
-    { num: '04', title: 'Direct Credit Payout', desc: 'Approved claims are released instantly to your bank account via NEFT replication.' }
+  const claimProcessTypes = [
+    {
+      title: 'Cashless Claim Process',
+      badge: 'Hospital / Network',
+      desc: 'Applicable when receiving medical treatment at any partner network hospital. The insurer settles hospital bills directly without out-of-pocket payment by the insured.',
+      highlights: [
+        'Pre-authorization request within 24 hours of emergency or 48 hours prior to planned admission',
+        'Direct settlement between Insurance TPA and Hospital Billing Desk',
+        'Zero out-of-pocket expenditure except for non-payable utility items'
+      ]
+    },
+    {
+      title: 'Reimbursement Claim Process',
+      badge: 'Any Hospital / Expense',
+      desc: 'Applicable when treatment is taken at non-network hospitals or for post-hospitalization bills, life term claims, and vehicle repair expenses.',
+      highlights: [
+        'Pay bills upfront and collect all original receipts and discharge summaries',
+        'Submit completed claim form along with documents within 15 days of discharge',
+        'Direct fund transfer (NEFT) to nominee or policyholder bank account'
+      ]
+    }
+  ];
+
+  const requiredDocuments = [
+    {
+      category: 'Health Insurance Claims',
+      docs: [
+        'Duly filled and signed Claim Form (Part A & Part B)',
+        'Original Hospital Discharge Summary card',
+        'Final itemized hospital bill with payment receipts',
+        'Doctor prescriptions and diagnostic lab reports',
+        'KYC documents (Aadhaar / PAN Card of policyholder)'
+      ]
+    },
+    {
+      category: 'Life & Term Insurance Claims',
+      docs: [
+        'Original Policy Bond Certificate',
+        'Death Certificate issued by Municipal Authority',
+        'Claimant / Nominee Statement Form',
+        'Medical Cause of Death Certificate / FIR (for accidental death)',
+        'Cancelled cheque with printed Nominee name'
+      ]
+    },
+    {
+      category: 'Motor & Travel Claims',
+      docs: [
+        'Duly signed accident / loss claim form',
+        'Registration Certificate (RC) & Driving License copy',
+        'Spot inspection report / FIR copy (if applicable)',
+        'Original repair invoice and cash payment receipts',
+        'Passport & Boarding pass copies (for Travel claims)'
+      ]
+    }
+  ];
+
+  const stepByStepGuide = [
+    {
+      step: '01',
+      title: 'Intimation & Pre-Authorization',
+      desc: 'Inform our Claims Desk or insurer within 24 hours. Show your Health Card or Policy Number at the hospital TPA desk for cashless pre-approval.'
+    },
+    {
+      step: '02',
+      title: 'Document Compilation',
+      desc: 'Gather original bills, discharge summaries, prescriptions, and diagnostic test reports. Ensure all documents bear hospital stamps and signatures.'
+    },
+    {
+      step: '03',
+      title: 'Submission & Verification',
+      desc: 'Submit physical or digital copies to Aynkaran Consultants or insurer portal. Our claims desk conducts an audit to prevent rejections.'
+    },
+    {
+      step: '04',
+      title: 'Assessment & Settlement',
+      desc: 'The insurance company processes the dossier. Approved claim funds are credited directly to your bank account via NEFT within 7-10 working days.'
+    }
   ];
 
   return (
-    <div className="space-y-5 text-left">
+    <div className="space-y-6 text-left">
+      {/* Header Banner */}
       <div className="space-y-1 text-center max-w-xl mx-auto">
-        <span className="text-[10px] bg-rose-50 text-rose-600 px-3 py-1 rounded-full font-bold uppercase tracking-widest">CLAIM DESK</span>
-        <h2 className="text-xl font-extrabold text-slate-900">Claim Settlement Support Portal</h2>
+        <span className="text-[10px] bg-rose-50 text-rose-600 border border-rose-200 px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+          CLAIMS ASSISTANCE
+        </span>
+        <h2 className="text-xl font-extrabold text-slate-900">Claim Settlement Portal</h2>
         <p className="text-xs text-slate-500 leading-normal">
-          The ultimate moment of trust in an insurance lifecycle is the claim. We stand by you with end-to-end documentation support.
+          Comprehensive guide to claim processes, required documentation, step-by-step procedures, and 24/7 dedicated support.
         </p>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
-        {claimSteps.map((step) => (
-          <div key={step.num} className="p-4 bg-white border border-slate-150 rounded-xl relative space-y-1.5">
-            <span className="text-2xl font-black font-mono text-slate-100 block absolute top-2 right-3 select-none">{step.num}</span>
-            <h4 className="font-bold text-xs text-slate-800">{step.title}</h4>
-            <p className="text-[11px] text-slate-500 leading-normal">{step.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 items-center bg-slate-900 text-white p-5 rounded-2xl">
-        <div className="space-y-3">
-          <span className="text-[9px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
-            24/7 HELPLINE
-          </span>
-          <h3 className="text-base font-extrabold tracking-tight">Need On-Field Cashless Support?</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Our claims assistance unit operates throughout the night to ensure cashless approvals across India. Call us or connect via video consultation.
-          </p>
-          <div className="flex gap-3 pt-1">
-            <div className="flex items-center gap-2 bg-slate-800 p-2.5 rounded-xl border border-slate-700">
-              <Phone className="w-4 h-4 text-emerald-400" />
-              <div>
-                <span className="block text-[8px] text-slate-400 uppercase font-bold">Call Now</span>
-                <span className="text-xs font-bold font-mono">+91 9876543210</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 bg-slate-800 p-2.5 rounded-xl border border-slate-700">
-              <Video className="w-4 h-4 text-blue-400" />
-              <div>
-                <span className="block text-[8px] text-slate-400 uppercase font-bold">Video Help</span>
-                <span className="text-xs font-bold font-mono">Book Zoom Intimation</span>
-              </div>
-            </div>
-          </div>
+      {/* 1. CLAIM PROCESS */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+          <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">1. Claim Process</h3>
         </div>
-
-        <div className="space-y-3 bg-slate-800 p-4 rounded-xl border border-slate-700">
-          <h4 className="font-bold text-xs text-amber-400">Required Claims Checklists</h4>
-          <ul className="space-y-1.5 text-xs text-slate-300">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-              <span>Original Policy Schedule Certificate document</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-              <span>Death Certificate issued by municipality (for Life covers)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-              <span>Detailed Hospital discharge summary cards & pre-auth forms</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-              <span>Cancelled cheque containing nominee's printed name for NEFT</span>
-            </li>
-          </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {claimProcessTypes.map((proc, idx) => (
+            <div key={idx} className="p-4 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
+              <div className="flex justify-between items-center">
+                <h4 className="font-bold text-xs text-slate-800">{proc.title}</h4>
+                <span className="text-[9px] bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded uppercase">
+                  {proc.badge}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">{proc.desc}</p>
+              <ul className="space-y-1 pt-1">
+                {proc.highlights.map((item, i) => (
+                  <li key={i} className="text-[11px] text-slate-500 flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* 2. REQUIRED DOCUMENTS */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">2. Required Documents</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {requiredDocuments.map((docGroup, idx) => (
+            <div key={idx} className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+              <h4 className="font-bold text-xs text-slate-800 border-b border-slate-100 pb-1.5">
+                {docGroup.category}
+              </h4>
+              <ul className="space-y-1.5">
+                {docGroup.docs.map((doc, i) => (
+                  <li key={i} className="text-[11px] text-slate-600 flex items-start gap-1.5">
+                    <span className="text-slate-400 font-bold">•</span>
+                    <span>{doc}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 3. STEP-BY-STEP GUIDE */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+          <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">3. Step-by-Step Guide</h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          {stepByStepGuide.map((st) => (
+            <div key={st.step} className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 relative shadow-sm">
+              <span className="text-2xl font-black font-mono text-slate-100 absolute top-2 right-3 select-none">
+                {st.step}
+              </span>
+              <h4 className="font-bold text-xs text-slate-800 pr-6">{st.title}</h4>
+              <p className="text-[11px] text-slate-500 leading-relaxed">{st.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. CONTACT SUPPORT */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+          <span className="w-2 h-2 rounded-full bg-purple-600"></span>
+          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">4. Contact Support</h3>
+        </div>
+        <div className="bg-slate-900 text-white p-5 rounded-xl grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-1.5">
+            <span className="text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-bold uppercase">
+              24/7 Toll-Free Line
+            </span>
+            <h4 className="font-bold text-sm text-white">Emergency Claims Desk</h4>
+            <p className="text-[11px] text-slate-400">Immediate hospital pre-authorization and intimation help available around the clock.</p>
+            <p className="text-sm font-bold font-mono text-emerald-400 pt-1">+91 9876543210</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <span className="text-[9px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded font-bold uppercase">
+              Email Assistance
+            </span>
+            <h4 className="font-bold text-sm text-white">Document Audit Desk</h4>
+            <p className="text-[11px] text-slate-400">Send scanned copies of medical bills and claims forms for pre-submission audit.</p>
+            <p className="text-xs font-bold font-mono text-blue-300 pt-1">claims@aynkaran.in</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <span className="text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold uppercase">
+              Head Office Support
+            </span>
+            <h4 className="font-bold text-sm text-white">Walk-in Help Center</h4>
+            <p className="text-[11px] text-slate-400">Visit our nearest consultancy desk for physical submission and advocate assistance.</p>
+            <p className="text-xs text-slate-300 pt-1">Corporate Tower, Mount Road, Chennai, TN</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
