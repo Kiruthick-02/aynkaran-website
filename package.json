@@ -1,0 +1,8 @@
+{
+  "name": "aynkaran-website-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend install && npm --prefix frontend run build"
+  }
+}
+
