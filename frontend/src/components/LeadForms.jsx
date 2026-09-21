@@ -4,10 +4,13 @@ import { Check, ClipboardList, Shield, UserCheck, AlertTriangle } from 'lucide-r
 
 // Desktop software backend (Customers → Enquiries tab)
 const DESKTOP_APIS = [
+  import.meta.env.VITE_API_DEPLOYED_URL,
   import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL,
-  import.meta.env.VITE_DESKTOP_API_URL,
   import.meta.env.VITE_API_URL,
+  import.meta.env.VITE_DESKTOP_API_URL,
+  'https://aynkaran-website.onrender.com',
   'https://aynkaran-backend.onrender.com',
+  'http://localhost:5000',
   'http://localhost:7860',
 ].filter(Boolean);
 

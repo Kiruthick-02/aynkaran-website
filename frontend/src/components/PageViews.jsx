@@ -32,20 +32,28 @@ export function WebsitePosters({ posters = {}, side = 'left' }) {
   );
 }
 
-const CONTENT_API =
+const BACKEND_API =
+  import.meta.env.VITE_API_DEPLOYED_URL ||
+  import.meta.env.VITE_API_URL ||
+  'https://aynkaran-website.onrender.com';
+
+const DESKTOP_API =
   import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
   import.meta.env.VITE_DESKTOP_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  'https://aynkaran-backend.onrender.com';
+  BACKEND_API;
 
-function contentMediaUrl(path) {
+function resolveMediaUrl(path) {
   if (!path) return null;
-  const s = String(path);
+  const s = String(path).trim();
+  if (!s) return null;
   if (/^https?:\/\//i.test(s) || s.startsWith('blob:') || s.startsWith('data:')) {
     return s;
   }
-  return `${CONTENT_API.replace(/\/$/, '')}${s.startsWith('/') ? s : `/${s}`}`;
+  const normalized = s.startsWith('/') ? s : `/${s}`;
+  return `${BACKEND_API.replace(/\/$/, '')}${normalized}`;
 }
+
+const contentMediaUrl = resolveMediaUrl;
 
 function isVideoPath(path) {
   return /\.(mp4|webm|mov|m4v|ogg)$/i.test(String(path || ''));
@@ -184,21 +192,7 @@ export function AboutUsView({ companies }) {
 // 2. INSURANCE COMPANIES PAGE
 // ==========================================
 export function CompaniesView({ companies, onSelectCompany, onViewProducts }) {
-  const DESKTOP_API =
-    import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
-    import.meta.env.VITE_DESKTOP_API_URL ||
-    'https://aynkaran-backend.onrender.com';
-  const BACKEND_API = import.meta.env.VITE_API_URL;
-
-  const imageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith('http://') || path.startsWith('https://')) return path;
-    const normalized = path.startsWith('/') ? path : `/${path}`;
-    const base = (String(normalized).startsWith('/uploads') && DESKTOP_API)
-      ? DESKTOP_API
-      : BACKEND_API || DESKTOP_API || 'http://localhost:5000';
-    return `${String(base).replace(/\/$/, '')}${normalized}`;
-  };
+  const imageUrl = resolveMediaUrl;
 
   const renderBold = (text) =>
     String(text || '')
@@ -398,23 +392,7 @@ export function ProductsView({ products, onSelectProduct, partnerFilter, onClear
       })
     : allProducts;
 
-  const DESKTOP_API =
-    import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
-    import.meta.env.VITE_DESKTOP_API_URL ||
-    'https://aynkaran-backend.onrender.com';
-  const BACKEND_API = import.meta.env.VITE_API_URL;
-
-  const fileUrl = (path) => {
-    if (!path) return null;
-    if (/^https?:\/\//i.test(String(path)) || String(path).startsWith('blob:')) {
-      return path;
-    }
-    const normalized = String(path).startsWith('/') ? path : `/${path}`;
-    const base = (normalized.startsWith('/uploads') && DESKTOP_API)
-      ? DESKTOP_API
-      : BACKEND_API || DESKTOP_API || 'http://localhost:5000';
-    return `${String(base).replace(/\/$/, '')}${normalized}`;
-  };
+  const fileUrl = resolveMediaUrl;
 
   const asList = (val) => {
     if (!val) return [];
@@ -916,20 +894,7 @@ export function NewsPostsView({ posts = [], onSelectPost, onAddEnquiry }) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const CONTENT_API =
-    import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
-    import.meta.env.VITE_DESKTOP_API_URL ||
-    import.meta.env.VITE_API_URL ||
-    'https://aynkaran-backend.onrender.com';
-
-  const mediaUrl = (path) => {
-    if (!path) return null;
-    const s = String(path);
-    if (/^https?:\/\//i.test(s) || s.startsWith('blob:') || s.startsWith('data:')) {
-      return s;
-    }
-    return `${CONTENT_API.replace(/\/$/, '')}${s.startsWith('/') ? s : `/${s}`}`;
-  };
+  const mediaUrl = resolveMediaUrl;
 
   const categories = [
     'All',
@@ -1367,20 +1332,7 @@ export function FAQsView({ faqs }) {
 // POSTERS VIEW (from Desktop Content Publishing)
 // ==========================================
 export function PostersView({ posters = {} }) {
-  const CONTENT_API =
-    import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
-    import.meta.env.VITE_DESKTOP_API_URL ||
-    import.meta.env.VITE_API_URL ||
-    'https://aynkaran-backend.onrender.com';
-
-  const mediaUrl = (path) => {
-    if (!path) return null;
-    const s = String(path);
-    if (/^https?:\/\//i.test(s) || s.startsWith('blob:') || s.startsWith('data:')) {
-      return s;
-    }
-    return `${CONTENT_API.replace(/\/$/, '')}${s.startsWith('/') ? s : `/${s}`}`;
-  };
+  const mediaUrl = resolveMediaUrl;
 
   const SLOTS = [
     {

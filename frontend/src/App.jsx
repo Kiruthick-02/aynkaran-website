@@ -31,7 +31,7 @@ import {
 const API_URL =
   import.meta.env.VITE_API_DEPLOYED_URL ||
   import.meta.env.VITE_API_URL ||
-  'https://aynkaran-backend.onrender.com';
+  'https://aynkaran-website.onrender.com';
 const DESKTOP_API_URL =
   import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
   import.meta.env.VITE_DESKTOP_API_URL ||
@@ -62,61 +62,62 @@ function pathToPage(pathname) {
 
 function contentMediaUrl(path) {
   if (!path) return null;
-  const s = String(path);
+  const s = String(path).trim();
+  if (!s) return null;
   if (/^https?:\/\//i.test(s) || s.startsWith('blob:') || s.startsWith('data:')) {
     return s;
   }
-  return `${DESKTOP_API_URL.replace(/\/$/, '')}${s.startsWith('/') ? s : `/${s}`}`;
+  const normalized = s.startsWith('/') ? s : `/${s}`;
+  return `${API_URL.replace(/\/$/, '')}${normalized}`;
 }
 
 async function fetchCatalog() {
+  const apis = [API_URL, DESKTOP_API_URL, 'https://aynkaran-website.onrender.com', 'https://aynkaran-backend.onrender.com'];
+  for (const base of apis) {
+    try {
+      const res = await fetch(`${base.replace(/\/$/, '')}/api/public/catalog`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && (data.companies?.length || data.products?.length)) return data;
+      }
+    } catch (_) {}
+  }
   const res = await fetch(`${API_URL}/api/public/catalog`);
   if (!res.ok) throw new Error('Failed to load catalog');
   return res.json();
 }
 
 async function fetchContent() {
-  // Preferred single endpoint from desktop Content Publishing
-  try {
-    const res = await fetch(`${DESKTOP_API_URL}/api/content`);
-    if (res.ok) return res.json();
-  } catch (_) {}
+  const apis = [API_URL, DESKTOP_API_URL, 'https://aynkaran-website.onrender.com', 'https://aynkaran-backend.onrender.com'];
+  for (const base of apis) {
+    try {
+      const res = await fetch(`${base.replace(/\/$/, '')}/api/content`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && !data.error && data.success !== false) return data;
+      }
+    } catch (_) {}
+  }
 
   // Fallback: separate routes
   const empty = { posters: {}, news: [], gallery: [] };
-  try {
-    const [p, n, g] = await Promise.allSettled([
-      fetch(`${DESKTOP_API_URL}/api/content/posters`).then((r) =>
-        r.ok ? r.json() : null
-      ),
-      fetch(`${DESKTOP_API_URL}/api/content/news`).then((r) =>
-        r.ok ? r.json() : null
-      ),
-      fetch(`${DESKTOP_API_URL}/api/content/gallery`).then((r) =>
-        r.ok ? r.json() : null
-      ),
-    ]);
-    return {
-      posters:
-        p.status === 'fulfilled'
-          ? p.value?.posters || p.value || {}
-          : {},
-      news:
-        n.status === 'fulfilled'
-          ? Array.isArray(n.value)
-            ? n.value
-            : n.value?.news || n.value?.posts || []
-          : [],
-      gallery:
-        g.status === 'fulfilled'
-          ? Array.isArray(g.value)
-            ? g.value
-            : g.value?.gallery || []
-          : [],
-    };
-  } catch {
-    return empty;
+  for (const base of apis) {
+    try {
+      const [p, n, g] = await Promise.allSettled([
+        fetch(`${base}/api/content/posters`).then((r) => (r.ok ? r.json() : null)),
+        fetch(`${base}/api/content/news`).then((r) => (r.ok ? r.json() : null)),
+        fetch(`${base}/api/content/gallery`).then((r) => (r.ok ? r.json() : null)),
+      ]);
+      if (p.status === 'fulfilled' && p.value) {
+        return {
+          posters: p.value?.posters || p.value || {},
+          news: n.status === 'fulfilled' ? (Array.isArray(n.value) ? n.value : n.value?.news || []) : [],
+          gallery: g.status === 'fulfilled' ? (Array.isArray(g.value) ? g.value : g.value?.gallery || []) : [],
+        };
+      }
+    } catch (_) {}
   }
+  return empty;
 }
 
 /** Sidebar posters from Content Publishing */
@@ -171,6 +172,9 @@ function WebsitePosters({ posters = {}, side = 'left', onClickPoster }) {
             src={item.url}
             alt={item.fileName || item.id}
             className="w-full h-auto object-cover max-h-64"
+            onError={(e) => {
+              e.currentTarget.parentElement.style.display = 'none';
+            }}
           />
         </div>
       ))}
