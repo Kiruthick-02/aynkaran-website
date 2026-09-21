@@ -24,6 +24,10 @@ app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
 
+app.get('/', (_req, res) => {
+  res.json({ status: 'ok', service: 'aynkaran-backend' });
+});
+
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
