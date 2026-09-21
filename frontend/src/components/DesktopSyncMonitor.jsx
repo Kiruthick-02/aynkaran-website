@@ -1,18 +1,6 @@
-//components/DesktopSyncMonitor.tsx
+//components/DesktopSyncMonitor.jsx
 import React, { useState } from 'react';
-import { AdvisorRegistration, InsuranceEnquiry, ContactMessage, NewsPost } from '../types';
 import { Database, Laptop, Plus, Trash2, Send, CheckCircle, RefreshCw } from 'lucide-react';
-
-interface DesktopSyncMonitorProps {
-  enquiries: InsuranceEnquiry[];
-  advisors: AdvisorRegistration[];
-  contacts: ContactMessage[];
-  newsPosts: NewsPost[];
-  onAddNewsPost: (post: NewsPost) => void;
-  onClearData: () => void;
-  onDeleteEnquiry: (id: string) => void;
-  onDeleteAdvisor: (id: string) => void;
-}
 
 export default function DesktopSyncMonitor({
   enquiries,
@@ -23,10 +11,10 @@ export default function DesktopSyncMonitor({
   onClearData,
   onDeleteEnquiry,
   onDeleteAdvisor
-}: DesktopSyncMonitorProps) {
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'leads' | 'publish' | 'db'>('leads');
-  const [syncStatus, setSyncStatus] = useState<'synced' | 'syncing'>('synced');
+  const [activeTab, setActiveTab] = useState('leads');
+  const [syncStatus, setSyncStatus] = useState('synced');
 
   // Form state for creating a mock news post
   const [postTitle, setPostTitle] = useState('');
@@ -43,14 +31,14 @@ export default function DesktopSyncMonitor({
     }, 1200);
   };
 
-  const handlePublishPost = (e: React.FormEvent) => {
+  const handlePublishPost = (e) => {
     e.preventDefault();
     if (!postTitle || !postDesc) {
       alert('Please fill out the Title and Short Description.');
       return;
     }
 
-    const newPost: NewsPost = {
+    const newPost = {
       id: `news-${Date.now()}`,
       title: postTitle,
       category: postCategory,
@@ -265,7 +253,7 @@ export default function DesktopSyncMonitor({
                   <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <p className="text-xs font-bold text-white uppercase font-mono">Quick Template Loader</p>
-                      <p className="text-[10px] text-slate-400">Pre-fill high-quality regulatory/tax awareness articles</p>
+                      <p className="text-[10px] text-slate-400 font-mono">Auto-fill educational content</p>
                     </div>
                     <button 
                       type="button" 
