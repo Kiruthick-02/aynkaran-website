@@ -23,21 +23,34 @@ app.use(cors({
 app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
 
 async function start() {
-  await client.connect();
-  const db = client.db('aynkaran_crm');   // same database
-
-  // Serve uploaded media if present at /uploads
-  const uploadsDir = path.join(process.cwd(), 'backend', 'uploads');
-  app.use('/uploads', express.static(uploadsDir));
-
-  app.use('/api', catalogRoutes(db));
-
-  app.listen(PORT, () => {
-    console.log(`Website Backend running on http://localhost:${PORT}`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Website Backend listening on port ${PORT}`);
   });
+
+  try {
+    if (!uri) {
+      throw new Error('MONGODB_URI is not configured');
+    }
+
+    const client = new MongoClient(uri);
+    await client.connect();
+    const db = client.db('aynkaran_crm');
+
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    app.use('/uploads', express.static(uploadsDir));
+
+    app.use('/api', catalogRoutes(db));
+    console.log('MongoDB connected and API routes are ready');
+  } catch (error) {
+    console.error('Backend startup failed:', error);
+    server.close(() => process.exit(1));
+  }
 }
 
-start().catch(console.error);
+start();
