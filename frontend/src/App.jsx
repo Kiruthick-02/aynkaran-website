@@ -21,20 +21,33 @@ import {
   PostersView,
 } from './components/PageViews';
 import {
-  Umbrella,
   Search,
   ArrowUp,
   Send,
   ArrowLeft,
+  Menu,
+  X,
 } from 'lucide-react';
 
+import logoImage from './assets/images/logo.jpeg';
+
+function BrandLogo({ className = 'w-11 h-11' }) {
+  return (
+    <img
+      src={logoImage}
+      alt="Aynkaran Consultants"
+      className={`${className} object-contain rounded-lg bg-white p-1`}
+    />
+  );
+}
+
 const API_URL =
-  import.meta.env.VITE_API_DEPLOYED_URL ||
   import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_DEPLOYED_URL ||
   'https://aynkaran-website.onrender.com';
 const DESKTOP_API_URL =
-  import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
   import.meta.env.VITE_DESKTOP_API_URL ||
+  import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
   'https://aynkaran-backend.onrender.com';
 
 const PAGE_PATHS = {
@@ -190,6 +203,7 @@ export default function App() {
 
   const [globalSearch, setGlobalSearch] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [enquiries, setEnquiries] = useState([]);
   const [advisors, setAdvisors] = useState([]);
@@ -621,10 +635,28 @@ if (data.announcements) {
 
   const searchResults = performSearch();
 
-  const navBtn = (page, label, extra = '') => (
+  const navItems = [
+    ['home', 'Home'],
+    ['about', 'About Us'],
+    ['companies', 'Insurers'],
+    ['products', 'Products'],
+    ['services', 'Services'],
+    ['claims', 'Claims Help'],
+    ['news', 'News'],
+    ['faqs', 'FAQs'],
+    ['gallery', 'Gallery'],
+    ['testimonials', 'Reviews'],
+    ['contact', 'Contact'],
+  ];
+
+  const navBtn = (page, label, extra = '', onClick = null) => (
     <button
+      key={page}
       type="button"
-      onClick={() => navigateToPage(page)}
+      onClick={() => {
+        if (onClick) onClick();
+        navigateToPage(page);
+      }}
       className={`transition-colors pb-0.5 ${extra} ${
         activePage === page
           ? 'text-[#F4B400] border-b-2 border-[#F4B400]'
@@ -653,8 +685,8 @@ if (data.announcements) {
             </div>
 
             <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight uppercase text-white flex items-center gap-3.5 mx-auto">
-              <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center shadow-inner">
-                <Umbrella className="w-6 h-6 text-[#0F4C81] stroke-[2.5]" />
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-inner overflow-hidden p-1.5">
+                <BrandLogo className="w-full h-full" />
               </div>
               <div className="text-left leading-none">
                 <span className="text-lg md:text-2xl font-black tracking-tight block">
@@ -723,19 +755,38 @@ if (data.announcements) {
           </div>
         </div>
 
-        <nav className="bg-[#0F4C81] py-3 px-6 flex flex-wrap justify-center gap-5 md:gap-7 text-[11px] md:text-xs font-black uppercase tracking-widest border-b border-white/5">
-          {navBtn('home', 'Home')}
-          {navBtn('about', 'About Us')}
-          {navBtn('companies', 'Insurers')}
-          {navBtn('products', 'Products')}
-          {navBtn('services', 'Services')}
-          {navBtn('claims', 'Claims Help')}
-          {navBtn('news', 'News')}
-          {navBtn('faqs', 'FAQs')}
-          {navBtn('gallery', 'Gallery')}
-          {navBtn('testimonials', 'Reviews')}
-          {navBtn('posters', 'Offers')}
-          {navBtn('contact', 'Contact')}
+        <div className="md:hidden bg-[#0F4C81] px-4 py-3 border-b border-white/10">
+          <div className="flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-[#0D4170] px-3 py-2 text-white text-[11px] font-bold uppercase tracking-wider"
+            >
+              <Menu className="w-4 h-4" />
+              Menu
+            </button>
+
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={() => navigateToPage('enquiry')}
+                className="inline-flex items-center justify-center rounded-lg bg-[#3FA9F5] px-3 py-2 text-white text-[10px] font-black uppercase tracking-widest"
+              >
+                Enquiry
+              </button>
+              <button
+                type="button"
+                onClick={() => navigateToPage('advisor')}
+                className="inline-flex items-center justify-center rounded-lg bg-[#F4B400] px-3 py-2 text-[#0F4C81] text-[10px] font-black uppercase tracking-widest"
+              >
+                Advisor
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <nav className="hidden md:flex bg-[#0F4C81] py-3 px-6 flex-wrap justify-center gap-5 md:gap-7 text-[11px] md:text-xs font-black uppercase tracking-widest border-b border-white/5">
+          {navItems.map(([page, label]) => navBtn(page, label))}
 
           <button
             type="button"
@@ -758,10 +809,78 @@ if (data.announcements) {
           </button>
         </nav>
 
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <button
+              type="button"
+              aria-label="Close menu"
+              className="absolute inset-0 bg-slate-900/50"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            <aside className="absolute left-0 top-0 h-full w-72 max-w-[85vw] bg-[#0F4C81] text-white shadow-2xl border-r border-white/10 p-4 z-10">
+              <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+                <span className="text-sm font-black uppercase tracking-wider">Pages</span>
+                <button
+                  type="button"
+                  aria-label="Close menu"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg border border-white/15 p-2"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                {navItems.map(([page, label]) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigateToPage(page);
+                    }}
+                    className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-bold uppercase tracking-wider transition ${
+                      activePage === page
+                        ? 'bg-white/10 text-[#F4B400]'
+                        : 'text-sky-100 hover:bg-white/5'
+                    }`}
+                  >
+                    <span>{label}</span>
+                    {activePage === page ? <span className="h-2 w-2 rounded-full bg-[#F4B400]" /> : null}
+                  </button>
+                ))}
+
+                <div className="pt-4 space-y-2 border-t border-white/10 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigateToPage('enquiry');
+                    }}
+                    className="w-full rounded-xl bg-[#3FA9F5] px-3 py-3 text-sm font-black uppercase tracking-wider text-white"
+                  >
+                    Enquiry Form
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigateToPage('advisor');
+                    }}
+                    className="w-full rounded-xl bg-[#F4B400] px-3 py-3 text-sm font-black uppercase tracking-wider text-[#0F4C81]"
+                  >
+                    Join as Advisor
+                  </button>
+                </div>
+              </div>
+            </aside>
+          </div>
+        )}
+
         <MarqueeTicker announcements={announcements} />
       </header>
 
-      <main className="flex-1 p-4 md:p-6 gap-6 max-w-[1920px] mx-auto w-full flex items-start">
+      <main className="flex-1 p-3 md:p-6 gap-3 md:gap-6 max-w-[1920px] mx-auto w-full flex items-start">
         {/* LEFT SIDEBAR */}
 <aside className={`hidden xl:flex flex-col gap-4 flex-shrink-0 sticky top-28 self-start transition-all
   ${posters?.customers?.length > 0 || posters?.leftTop ? 'w-52' : 'w-0 overflow-hidden'}`}>
@@ -772,7 +891,7 @@ if (data.announcements) {
         <section className="flex-1 min-w-0 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col overflow-hidden">
           <div
             id="center-scrollable"
-            className="p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-220px)] custom-scrollbar"
+            className="p-4 sm:p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-220px)] custom-scrollbar"
           >
             {activePage !== 'home' && (
               <div className="mb-4">
@@ -948,8 +1067,6 @@ if (data.announcements) {
               />
             )}
 
-            {activePage === 'posters' && <PostersView posters={posters} />}
-
             {activePage === 'news' && !selectedPost && (
               <NewsPostsView
                 posts={newsPosts}
@@ -1011,9 +1128,9 @@ if (data.announcements) {
                     opportunities.
                   </p>
                   <p className="text-xs text-slate-600">
-                    📞 +91 9876543210
+                    📞 +91 9489836247
                     <br />
-                    ✉️ contact@aynkaran.in
+                    ✉️ info.aynkaran@gmail.com
                   </p>
                 </div>
                 <ContactForm onAddContact={handleAddContact} />
@@ -1047,7 +1164,9 @@ if (data.announcements) {
         <div className="max-w-[1920px] mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Umbrella className="w-4 h-4 text-white" />
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden p-1">
+                <BrandLogo className="w-full h-full" />
+              </div>
               <span className="font-extrabold text-white text-sm uppercase">
                 Aynkaran Consultants
               </span>
@@ -1081,8 +1200,8 @@ if (data.announcements) {
             </button>
           </div>
           <div className="text-xs text-slate-400">
-            <p>📞 +91 9876543210</p>
-            <p>✉️ contact@aynkaran.in</p>
+            <p>📞 +91 9489836247</p>
+            <p>✉️ info.aynkaran@gmail.com</p>
             <button
               type="button"
               onClick={() => navigateToPage('enquiry')}

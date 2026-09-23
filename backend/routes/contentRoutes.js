@@ -61,10 +61,54 @@ export function contentRoutes(db) {
   const galleryCol = db.collection('content_gallery');
   const announcementsCol = db.collection('content_announcements');
   const categoriesCol = db.collection('content_categories');
+  const claimHelpCol = db.collection('content_claimhelp');
+  const claimHelpProceduresCol = db.collection('content_claimhelp_procedures');
+  const claimHelpHelplinesCol = db.collection('content_claimhelp_helplines');
 
   // GET /api/content
   router.get('/', async (_req, res) => {
     try {
+      const claimHelpDocs = await claimHelpCol.find({}).sort({ companyName: 1, createdAt: -1 }).toArray();
+      const claimHelpProcedures = await claimHelpProceduresCol.find({}).sort({ companyId: 1, order: 1, createdAt: -1 }).toArray();
+      const claimHelpHelplines = await claimHelpHelplinesCol.find({}).sort({ companyId: 1, order: 1, createdAt: -1 }).toArray();
+
+      const proceduresMap = new Map();
+      for (const entry of claimHelpProcedures) {
+        const companyId = entry.companyId?.toString();
+        if (!companyId) continue;
+        if (!proceduresMap.has(companyId)) proceduresMap.set(companyId, []);
+        proceduresMap.get(companyId).push({
+          id: entry._id?.toString() || entry.id,
+          text: entry.text || '',
+          order: Number.isFinite(Number(entry.order)) ? Number(entry.order) : 0,
+        });
+      }
+
+      const helplinesMap = new Map();
+      for (const entry of claimHelpHelplines) {
+        const companyId = entry.companyId?.toString();
+        if (!companyId) continue;
+        if (!helplinesMap.has(companyId)) helplinesMap.set(companyId, []);
+        helplinesMap.get(companyId).push({
+          id: entry._id?.toString() || entry.id,
+          number: entry.number || '',
+          order: Number.isFinite(Number(entry.order)) ? Number(entry.order) : 0,
+        });
+      }
+
+      const companies = claimHelpDocs.map((company) => {
+        const companyId = company._id?.toString() || company.id;
+        const companyProcedures = (proceduresMap.get(companyId) || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+        const companyHelplines = (helplinesMap.get(companyId) || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+        return {
+          id: companyId,
+          companyName: company.companyName || '',
+          companyProfileImage: company.companyProfileImage || '',
+          procedures: companyProcedures,
+          helplineNumbers: companyHelplines,
+        };
+      }).filter((company) => company.companyName || company.id);
+
       const posterDocs = await postersCol.find({}).sort({ order: 1, updatedAt: -1 }).toArray();
       const customers = [];
       const advisors = [];
@@ -111,6 +155,9 @@ export function contentRoutes(db) {
       });
 
       res.json({
+        claimHelp: {
+          companies,
+        },
         posters: { customers, advisors },
         news: news.map(shapeNews),
         gallery: gallery.map(shapeGallery),

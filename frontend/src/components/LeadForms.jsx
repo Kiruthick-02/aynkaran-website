@@ -168,16 +168,16 @@ export function EnquiryForm({ onAddEnquiry }) {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="bg-white rounded-3xl border border-slate-100 p-4 md:p-8 shadow-sm">
+      <div className="flex items-center gap-3 mb-4 md:mb-6">
         <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
           <ClipboardList className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="font-bold text-slate-800 text-lg">
+          <h3 className="font-bold text-slate-800 text-base md:text-lg">
             Instant Insurance Enquiry
           </h3>
-          <p className="text-xs text-slate-400">
+          <p className="text-[11px] md:text-xs text-slate-400">
             Get a tailored plan recommendation directly in your inbox.
           </p>
         </div>
@@ -202,7 +202,7 @@ export function EnquiryForm({ onAddEnquiry }) {
           </button>
         </div>
       ) : (
-        <form onSubmit={handlePreSubmit} className="space-y-5">
+        <form onSubmit={handlePreSubmit} className="space-y-4 md:space-y-5">
           {error && (
             <div className="p-3 bg-rose-50 border border-rose-150 text-rose-700 rounded-xl text-xs font-medium flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 flex-shrink-0" />
@@ -210,7 +210,7 @@ export function EnquiryForm({ onAddEnquiry }) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                 Full Name *
@@ -225,7 +225,7 @@ export function EnquiryForm({ onAddEnquiry }) {
                 className="w-full mt-1.5 p-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none transition"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                   Gender
@@ -257,7 +257,7 @@ export function EnquiryForm({ onAddEnquiry }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                 Mobile Number *
@@ -268,7 +268,7 @@ export function EnquiryForm({ onAddEnquiry }) {
                 required
                 value={formData.mobile}
                 onChange={handleChange}
-                placeholder="e.g., 9876543210"
+                placeholder="e.g., 9489836247"
                 className="w-full mt-1.5 p-3 text-sm bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-100"
               />
             </div>
@@ -298,7 +298,7 @@ export function EnquiryForm({ onAddEnquiry }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                 Email ID *
@@ -345,7 +345,7 @@ export function EnquiryForm({ onAddEnquiry }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-widest py-4 rounded-xl transition shadow-lg shadow-blue-100 flex items-center justify-center gap-2"
+            className="w-full bg-[#0F4C81] hover:bg-[#0C3D6D] text-white font-black text-[11px] uppercase tracking-[0.18em] py-4 rounded-xl transition shadow-md shadow-blue-200 flex items-center justify-center gap-2"
           >
             {loading
               ? 'Syncing with office system...'
@@ -500,16 +500,16 @@ export function AdvisorForm({ onAddAdvisor }) {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="bg-white rounded-3xl border border-slate-100 p-4 md:p-8 shadow-sm">
+      <div className="flex items-center gap-3 mb-4 md:mb-6">
         <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
           <UserCheck className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="font-bold text-slate-800 text-lg">
+          <h3 className="font-bold text-slate-800 text-base md:text-lg">
             Advisor Registration Form
           </h3>
-          <p className="text-xs text-slate-400">
+          <p className="text-[11px] md:text-xs text-slate-400">
             Join our group to unlock recurring financial commissions and
             professional certs.
           </p>
@@ -543,7 +543,7 @@ export function AdvisorForm({ onAddAdvisor }) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                 Full Name *
@@ -558,7 +558,7 @@ export function AdvisorForm({ onAddAdvisor }) {
                 className="w-full mt-1.5 p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-100"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                   Gender
@@ -590,7 +590,7 @@ export function AdvisorForm({ onAddAdvisor }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                 Mobile Number *
@@ -631,7 +631,7 @@ export function AdvisorForm({ onAddAdvisor }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                 Email ID *
@@ -871,7 +871,7 @@ export function ContactForm({ onAddContact }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-blue-700 transition"
+            className="w-full bg-[#0F4C81] hover:bg-[#0C3D6D] text-white py-3 rounded-xl font-black uppercase text-[11px] tracking-[0.18em] transition shadow-md shadow-blue-200"
           >
             {loading ? 'Transmitting...' : 'Send Message'}
           </button>

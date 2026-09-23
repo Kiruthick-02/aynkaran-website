@@ -1,5 +1,5 @@
 //components/PageViews.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Building, ShieldAlert, Award, Calendar, Heart, BookOpen, 
   User, Search, Share2, ArrowRight, CheckCircle2, ChevronRight,
@@ -33,13 +33,13 @@ export function WebsitePosters({ posters = {}, side = 'left' }) {
 }
 
 const BACKEND_API =
-  import.meta.env.VITE_API_DEPLOYED_URL ||
   import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_DEPLOYED_URL ||
   'https://aynkaran-website.onrender.com';
 
 const DESKTOP_API =
-  import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
   import.meta.env.VITE_DESKTOP_API_URL ||
+  import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL ||
   BACKEND_API;
 
 function resolveMediaUrl(path) {
@@ -179,8 +179,8 @@ export function AboutUsView({ companies }) {
             "We believe that insurance shouldn't be a generic box product. Every family has a unique dynamic, a different home loan debt structure, and specific higher-education goals. Our team acts as an advisory shield, matching your needs with premium plans from leading companies."
           </p>
           <div className="flex gap-4 pt-1 text-[9px] font-mono text-slate-400">
-            <span>📞 +91 9876543210</span>
-            <span>✉️ contact@aynkaran.in</span>
+            <span>📞 +91 9489836247</span>
+            <span>✉️ info.aynkaran@gmail.com</span>
           </div>
         </div>
       </div>
@@ -690,6 +690,94 @@ export function ClaimsView() {
     { step: 'D', title: 'Settlement', desc: 'The insurer pays the hospital directly, minus any non-medical deductions.' }
   ];
 
+  const [claimCompanies, setClaimCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const fetchClaimHelp = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError('');
+
+      const apiBases = [
+        import.meta.env.VITE_DESKTOP_API_URL,
+        import.meta.env.VITE_DESKTOP_DEPLOYED_API_URL,
+        import.meta.env.VITE_API_URL,
+        import.meta.env.VITE_API_DEPLOYED_URL,
+        DESKTOP_API,
+        BACKEND_API,
+      ].filter(Boolean).filter((value, index, arr) => arr.indexOf(value) === index);
+
+      let lastError = null;
+
+      for (const apiBase of apiBases) {
+        try {
+          const response = await fetch(`${apiBase.replace(/\/$/, '')}/api/content`);
+          if (!response.ok) {
+            lastError = new Error(`Request failed with status ${response.status}`);
+            continue;
+          }
+
+          const data = await response.json();
+          const companies = Array.isArray(data?.claimHelp?.companies)
+            ? data.claimHelp.companies
+            : [];
+
+          if (companies.length > 0 || data?.claimHelp) {
+            setClaimCompanies(companies);
+            return;
+          }
+
+          if (!data?.claimHelp) {
+            setClaimCompanies([]);
+            return;
+          }
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      if (lastError) {
+        throw lastError;
+      }
+
+      setClaimCompanies([]);
+    } catch (err) {
+      console.warn('[claim-help] no live data available', err);
+      setError('Unable to load claim help information right now.');
+      setClaimCompanies([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchClaimHelp();
+
+    const handlePageRefresh = () => {
+      if (!document.hidden) {
+        fetchClaimHelp();
+      }
+    };
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        fetchClaimHelp();
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageRefresh);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      window.removeEventListener('pageshow', handlePageRefresh);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [fetchClaimHelp]);
+
+  const sortedByOrder = (items = []) =>
+    [...items].sort((a, b) => (Number(a?.order ?? 0) || 0) - (Number(b?.order ?? 0) || 0));
+
   return (
     <div className="space-y-6 text-left">
       <div className="space-y-1 text-center max-w-xl mx-auto">
@@ -719,89 +807,109 @@ export function ClaimsView() {
         </div>
       </div>
 
-      {/* 2. DOCUMENT CHECKLIST */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">2. Essential Document Checklist</h3>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Medical / Health Claims</h4>
-            <ul className="space-y-1.5">
-              {['Original Discharge Summary', 'Final Hospital Bill & Receipts', 'Diagnostic Reports (X-Ray, MRI)', 'Cancelled Cheque for Payout'].map((item, i) => (
-                <li key={i} className="text-[11px] text-slate-600 flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="space-y-2">
-            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Life / Death Claims</h4>
-            <ul className="space-y-1.5">
-              {['Original Policy Document', 'Death Certificate (Municipal)', 'Nominee ID & Address Proof', 'Claimant Statement Form'].map((item, i) => (
-                <li key={i} className="text-[11px] text-slate-600 flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" /> {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. STEP BY STEP GUIDE */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
-          <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">3. Step-by-Step Guide</h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {stepByStepGuide.map((st) => (
-            <div key={st.step} className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 relative shadow-sm">
-              <span className="text-2xl font-black font-mono text-slate-100 absolute top-2 right-3 select-none">
-                {st.step}
-              </span>
-              <h4 className="font-bold text-xs text-slate-800 pr-6">{st.title}</h4>
-              <p className="text-[11px] text-slate-500 leading-relaxed">{st.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 4. CONTACT SUPPORT */}
+      {/* 2. DYNAMIC CLAIM SUPPORT */}
       <div className="space-y-3">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
           <span className="w-2 h-2 rounded-full bg-purple-600"></span>
-          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">4. Contact Support</h3>
+          <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">2. Company Helpline</h3>
         </div>
-        <div className="bg-slate-900 text-white p-5 rounded-xl grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-1.5">
-            <span className="text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-bold uppercase">
-              24/7 Toll-Free Line
-            </span>
-            <h4 className="font-bold text-sm text-white">Emergency Claims Desk</h4>
-            <p className="text-[11px] text-slate-400">Immediate hospital pre-authorization and intimation help available around the clock.</p>
-            <p className="text-sm font-bold font-mono text-emerald-400 pt-1">+91 9876543210</p>
-          </div>
 
-          <div className="space-y-1.5">
-            <span className="text-[9px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded font-bold uppercase">
-              Email Assistance
-            </span>
-            <h4 className="font-bold text-sm text-white">Document Audit Desk</h4>
-            <p className="text-[11px] text-slate-400">Send scanned copies of medical bills and claims forms for pre-submission audit.</p>
-            <p className="text-xs font-bold font-mono text-blue-300 pt-1">claims@aynkaran.in</p>
+        {loading ? (
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-sm text-slate-500 text-center">
+            Loading claim help details...
           </div>
+        ) : error ? (
+          <div className="bg-rose-50 border border-rose-200 rounded-2xl p-5 text-sm text-rose-700 text-center">
+            {error}
+          </div>
+        ) : claimCompanies.length === 0 ? (
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-sm text-slate-500 text-center">
+            No claim help information available.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {claimCompanies.map((company) => {
+              const companyImage = contentMediaUrl(company.companyProfileImage);
+              const procedures = sortedByOrder(company.procedures || []);
+              const helplines = sortedByOrder(company.helplineNumbers || []);
+              const initials = (company.companyName || 'Company')
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((part) => part[0])
+                .join('')
+                .toUpperCase() || 'C';
 
-          <div className="space-y-1.5">
-            <span className="text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold uppercase">
-              Head Office Support
-            </span>
-            <h4 className="font-bold text-sm text-white">Walk-in Help Center</h4>
-            <p className="text-[11px] text-slate-400">Visit our nearest consultancy desk for physical submission and advocate assistance.</p>
-            <p className="text-xs text-slate-300 pt-1">Corporate Tower, Mount Road, Chennai, TN</p>
+              return (
+                <div key={company.id || company.companyName} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
+                    {companyImage ? (
+                      <img
+                        src={companyImage}
+                        alt={company.companyName || 'Company profile'}
+                        className="w-14 h-14 rounded-xl object-cover border border-slate-200 bg-slate-50"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.parentElement?.querySelector('[data-fallback]');
+                          if (fallback) fallback.classList.remove('hidden');
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      data-fallback
+                      className={`${companyImage ? 'hidden' : 'flex'} w-14 h-14 rounded-xl border border-slate-200 bg-slate-50 items-center justify-center text-sm font-black text-slate-600`}
+                      aria-hidden="true"
+                    >
+                      {initials}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-base text-slate-900 truncate">
+                        {company.companyName || 'Claim Support'}
+                      </h4>
+                      <p className="text-[10px] uppercase tracking-wider text-slate-500">
+                        Claims assistance
+                      </p>
+                    </div>
+                  </div>
+
+                  {procedures.length > 0 && (
+                    <div className="space-y-2 mb-4">
+                      <h5 className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        Procedures
+                      </h5>
+                      <ul className="space-y-2">
+                        {procedures.map((procedure) => (
+                          <li key={procedure.id || procedure.text} className="flex items-start gap-2 text-[11px] text-slate-700 leading-relaxed">
+                            <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 text-emerald-500 shrink-0" />
+                            <span>{procedure.text}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {helplines.length > 0 && (
+                    <div className="space-y-2">
+                      <h5 className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        Helpline numbers
+                      </h5>
+                      <ul className="space-y-2">
+                        {helplines.map((numberEntry) => (
+                          <li key={numberEntry.id || numberEntry.number} className="flex items-center gap-2 text-[11px] text-slate-700">
+                            <Phone className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                            <a href={`tel:${numberEntry.number}`} className="text-slate-700 hover:text-slate-900 underline decoration-dotted">
+                              {numberEntry.number}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
